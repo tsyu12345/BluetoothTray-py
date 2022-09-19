@@ -1,60 +1,36 @@
 from __future__ import annotations
-from typing import Final as const, Callable
+from typing import Final as const , Callable
+from abc import ABC, abstractmethod
 
-from pystray import Icon, MenuItem, Menu
-from PIL import Image
+from pystray import MenuItem
 
-from abstractGUI import AbsUI
-
-
-
-"""_summary_
-UI機能の実装統合クラス。
-メインのUIを定義する。
-"""
-class MainUITray(AbsUI):
+class AbsUI(ABC):
     
-    ICON_SRC_PATH: const[str] = "BluetoothTray-py/libs/bin/bluetooth-b.ico"
-    APP_NAME: const[str] = "BluetoothTray"
-    
-    def __init__(self, scran_devices: list[str]) -> None:
-        super().__init__(scran_devices)
-        self._icon_image = Image.open(self.ICON_SRC_PATH)
-        #TODO:メニューの実装
-        self._app_icon: Icon
-        self._tray_menu: Menu
-    
-    
-    def start_application(self) -> None:
-        """_summary_
-        run()メソッドを実行し、アプリケーションを起動する。
+    def __init__(self, devices:list) -> None:
+        """_summary_\n
+        UIクラスの基底クラス\n
+        UI基本機能の定義\n
         """
-        self._tray_menu = Menu(*self._menu_items.values())
-        self._app_icon = Icon(self.APP_NAME, self._icon_image, self.APP_NAME, self._tray_menu)
-        self._app_icon.run()
-        
+        self._menu_items: dict[str, MenuItem] = {}
+        self.devices = devices
     
-    def kill_application(self) -> None:
-        """_summary_
-        アプリケーションを終了する。
+    
+    def create_item_obj(self, text: str, bold_font:bool,callback: Callable) -> None:
+        """_summary_\n
+        メニュー項目のオブジェクトを生成する。\n
+        同時にそのオブジェクトのクリックイベントハンドラを設定する。\n
+        Args:
+            text (str): 表示テキスト\n
+            bold_font (bool): フォントを太字にするかどうか\n
+            callback (Callable): コールバック関数\n
         """
-        self._app_icon.stop()
-        
-    
-    def create_item_obj(self, text: str, callback: Callable) -> None:
-        self._menu_items[text] = MenuItem(text, callback)
+        self._menu_items[text] = MenuItem(text, callback, checked=None, default=False, visible=True, enabled=True)
         
     
     def remove_item_obj(self, text: str) -> None:
+        """_summary_\n
+        指定のテキストを持つメニュー項目を削除する。\n
+        """
         self._menu_items.pop(text)
-        
-        
     
-
-#TEST
-
-if __name__ == "__main__":
-    #ui = UIInterface(["test1", "test2"])
-    #ui.start_application()
-    test = MainUITray(["test1", "test2"])
-    test.start_application()
+    
