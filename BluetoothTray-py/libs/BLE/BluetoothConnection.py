@@ -20,7 +20,7 @@ class BLEConnection(AbsBLEConnection):
             list[IConnectedDeviceInfo]: 検出したデバイス情報のリスト
         #todo :例外処理の追加
         """
-        discovered_devices = await discover() #<- FIXME:Deprecated
+        discovered_devices = await discover() #<- FIXME :Deprecated
         devices_list:list[IConnectedDeviceInfo] = []
         
         for i, device in enumerate(discovered_devices):
