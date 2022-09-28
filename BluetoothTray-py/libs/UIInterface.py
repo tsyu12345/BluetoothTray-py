@@ -6,13 +6,12 @@ from pystray import MenuItem
 
 class AbsUI(ABC):
     
-    def __init__(self, devices:list) -> None:
+    def __init__(self) -> None:
         """_summary_\n
-        UIクラスの基底クラス\n
+        UIクラスの基底クラス\ns
         UI基本機能の定義\n
         """
         self._menu_items: dict[str, MenuItem] = {}
-        self.devices = devices
     
     
     def create_item_obj(self, text: str, bold_font:bool,callback: Callable) -> None:
