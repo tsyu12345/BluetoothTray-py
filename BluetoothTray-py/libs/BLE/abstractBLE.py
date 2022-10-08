@@ -19,7 +19,7 @@ class IConnectedDeviceInfo:
             RSSI_value (str|None): デバイスのRSSI値\n
         """
         self.MAC_address: str      = MAC_address
-        self.name: str      = device_name 
+        self.name: str             = device_name 
         self.RSSI_value:  int|None = RSSI_value
         
 class IResultConnection(Enum):

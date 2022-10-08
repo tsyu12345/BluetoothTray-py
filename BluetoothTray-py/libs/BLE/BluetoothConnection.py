@@ -4,6 +4,7 @@ from typing import Final as const , Callable
 
 from bleak import discover
 import bleak.backends.winrt.client as BLEClient
+import json
 
 from abstractBLE import AbsBLEConnection, IConnectedDeviceInfo, IResultConnection
 
@@ -11,6 +12,7 @@ class BLEConnection(AbsBLEConnection):
     
     def __init__(self) -> None:
         super()
+        self.devices: list[IConnectedDeviceInfo] = []
         
     #private method
     async def __scan(self) -> list[IConnectedDeviceInfo]:
@@ -51,6 +53,14 @@ class BLEConnection(AbsBLEConnection):
                 return IResultConnection.FAILED
     
     
+    def save_json(self) -> None:
+        """_summary_\n
+        接続済みのデバイス情報をJSONファイルに保存するメソッド\n
+        """
+        with open("./connected_devices.json", "w") as f:
+            json.dump(self.devices, f, indent=4)
+    
+    
     #implements abstract method
     def scan_devices(self) -> list[IConnectedDeviceInfo]:
         #TODO: 例外処理の追加
@@ -63,6 +73,9 @@ class BLEConnection(AbsBLEConnection):
         #TODO: 例外処理の追加
         result:const[IResultConnection] = self.loop.run_until_complete(self.__connect(device_info))
         
+        if result is IResultConnection.SUCCESS and device_info not in self.devices:
+            self.devices.append(device_info)
+            
         return result
         
         
