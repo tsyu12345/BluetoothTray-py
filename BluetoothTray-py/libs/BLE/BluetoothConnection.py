@@ -6,7 +6,7 @@ from bleak import discover
 import bleak.backends.winrt.client as BLEClient
 import json
 
-from abstractBLE import AbsBLEConnection, IConnectedDeviceInfo, IResultConnection
+from .abstractBLE import AbsBLEConnection, IConnectedDeviceInfo, IResultConnection
 
 class BLEConnection(AbsBLEConnection):
     
@@ -57,8 +57,8 @@ class BLEConnection(AbsBLEConnection):
         """_summary_\n
         接続済みのデバイス情報をJSONファイルに保存するメソッド\n
         """
-        with open("./connected_devices.json", "w") as f:
-            json.dump(self.devices, f, indent=4)
+        with open("./connected_devices.json", "w") as file:
+            json.dump(self.devices, file, indent=4)
     
     
     #implements abstract method

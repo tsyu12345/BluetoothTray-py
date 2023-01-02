@@ -1,2 +1,4 @@
 if __name__ == "__main__":
-    pass
+    from .MainUITray import MainUITray
+    app = MainUITray()
+    app.start_application()

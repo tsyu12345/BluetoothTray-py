@@ -3,9 +3,9 @@ from typing import Final as const, Callable
 from pystray import Icon, MenuItem, Menu
 from PIL import Image
 
-from UIInterface import AbsUI
-from BLE.abstractBLE import IConnectedDeviceInfo, IResultConnection
-from BLE.BluetoothConnection import BLEConnection
+from .UIInterface import AbsUI
+from .libs.BLE.abstractBLE import IConnectedDeviceInfo, IResultConnection
+from .libs.BLE.BluetoothConnection import BLEConnection
 
 
 
@@ -19,7 +19,7 @@ class MainUITray(AbsUI):
     APP_NAME: const[str] = "BluetoothTray"
     
     def __init__(self) -> None: #TODO:デバイス情報の型定義を読む
-        super()
+        super().__init__()
         self._icon_image = Image.open(self.ICON_SRC_PATH)
         #TODO:メニューの実装
         self._app_icon: Icon
@@ -37,7 +37,6 @@ class MainUITray(AbsUI):
         各イベントハンドラの初期化ラッパー関数
         """
         #self.create_item_obj("test", False, self.test)
-        #todo:
         self.create_item_obj("Quit BluetoothTray", True, self.kill_application_event) #アプリケーション終了用
         
         
@@ -56,7 +55,7 @@ class MainUITray(AbsUI):
         
         #scan devices
         self.scanned_devices = self.BLE.scan_devices()
-        
+        print(self.scanned_devices)
         #init UI Event handlers
         self.__init_event_handlers()
         #self.connection_event()
@@ -95,12 +94,5 @@ class MainUITray(AbsUI):
         検出したデバイス、ペアリング済みデバイスのメニューを生成する。
         """
         for device in self.scanned_devices:
-            self.create_item_obj(device.name, False, self.connection_event) #todo:デバイス情報の受け渡し
+            super().create_item_obj(device.name, False, self.connection_event) #todo:デバイス情報の受け渡し
     
-
-#TEST
-
-if __name__ == "__main__":
-    #ui = UIInterface(["test1", "test2"])
-    #ui.start_application()
-    pass
